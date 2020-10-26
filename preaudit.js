@@ -4,8 +4,8 @@ const fs = require("fs");
 
 try {
   const lernaPkgNames = process.argv.slice(2);
-  const numPruned = 0;
   const packageJson = JSON.parse(fs.readFileSync("package.json", "utf-8"));
+  let numPruned = 0;
 
   if (packageJson.dependencies != null) {
     for (const pkgName in packageJson.dependencies) {
@@ -29,5 +29,5 @@ try {
     fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 2));
   }
 } catch (error) {
-  console.error(error.message);
+  console.error(error);
 }
