@@ -17,7 +17,7 @@ async function execAndReturnOutput(command) {
 (async () => {
   const lernaPkgNames = (await execAndReturnOutput("npx lerna list --loglevel silent")).trim().split("\n");
   const npmAuditArgs = core.getInput("npm-audit-args");
-  await exec.exec(`npx lerna exec -- node preaudit.js ${lernaPkgNames.join(' ')}`);
+  await exec.exec(`npx lerna exec -- node ${__dirname}/preaudit.js ${lernaPkgNames.join(' ')}`);
   if (core.getInput("include-root") === "true") {
     await exec.exec(`npm audit ${npmAuditArgs}`);
   }
