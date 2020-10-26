@@ -1,15 +1,28 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
+const core = require("@actions/core");
+const exec = require("@actions/exec");
 
-try {
-  // `who-to-greet` input defined in action metadata file
-  const nameToGreet = core.getInput('who-to-greet');
-  console.log(`Hello ${nameToGreet}!`);
-  const time = (new Date()).toTimeString();
-  core.setOutput("time", time);
-  // Get the JSON webhook payload for the event that triggered the workflow
-  const payload = JSON.stringify(github.context.payload, undefined, 2)
-  console.log(`The event payload: ${payload}`);
-} catch (error) {
-  core.setFailed(error.message);
+async function execAndReturnOutput(command) {
+  let capturedOutput = "";
+  const options = {
+    listeners: {
+      stdout: (data) => {
+        capturedOutput += data.toString();
+      }
+    }
+  }
+  await exec.exec(command, options);
+  return capturedOutput;
 }
+
+(async () => {
+  const lernaPkgNames = (await execAndReturnOutput("npx lerna ls --loglevel silent")).trim().split("\n");
+  const npmAuditArgs = core.getInput("npm-audit-args");
+  await exec.exec(`npx lerna exec -- node preaudit.js ${" ".join(lernaPkgNames)}`);
+  if (core.getInput("include-root") === "true") {
+    await exec.exec(`npm audit ${npmAuditArgs}`);
+  }
+  await exec.exec(`npx lerna exec -- npm audit ${npmAuditArgs}`);
+  await exec.exec("git reset --hard");
+})().catch((error) => {
+  core.setFailed(error.message);
+})

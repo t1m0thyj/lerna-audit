@@ -1,13 +1,17 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Lerna Audit'
+description: 'GitHub Action to run NPM audit on Lerna monorepo'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
-    required: true
-    default: 'World'
-outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  include-root:
+    description: 'Run audit at root level of project'
+    required: false
+    default: 'true'
+  npm-audit-args:
+    description: 'Args that will be passed to "npm audit"'
+    required: false
+    default: ''
+# outputs:
+#   time: # id of output
+#     description: 'The time we greeted you'
 runs:
   using: 'node12'
   main: 'index.js'
