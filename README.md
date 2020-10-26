@@ -1,23 +1,29 @@
-# Hello world JavaScript action
+# Lerna Audit action
 
-This action prints "Hello World" or "Hello" + the name of a person to greet to the log. To learn how this action was built, see "[Creating a JavaScript action](https://help.github.com/en/articles/creating-a-javascript-action)" in the GitHub Help documentation.
+GitHub Action to run NPM audit on Lerna monorepo
+
+Implements https://github.com/lerna/lerna/issues/1663#issuecomment-559010254 since there is currently no `lerna audit` command.
 
 ## Inputs
 
-### `who-to-greet`
+### `include-root`
 
-**Required** The name of the person to greet. Default `"World"`.
+Specifies whether the root level of the project should be included as a package to be audited.
+
+Default: `true`
+
+### `npm-audit-args`
+
+Arguments that are passed on to the NPM audit command. See [NPM docs](https://docs.npmjs.com/cli/audit) for a list of supported arguments.
 
 ## Outputs
 
-### `time`
-
-The time we greeted you.
+None
 
 ## Example usage
 
 ```yaml
-uses: actions/hello-world-javascript-action@main
+uses: t1m0thyj/lerna-audit@master
 with:
-  who-to-greet: 'Mona the Octocat'
+  npm-audit-args: --production --audit-level=moderate
 ```
