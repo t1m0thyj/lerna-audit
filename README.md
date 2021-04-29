@@ -1,5 +1,7 @@
 # Lerna Audit action
 
+**This project is no longer maintained. Using npm@7 workspaces is recommended as it makes this action unnecessary.**
+
 GitHub Action to run NPM audit on Lerna monorepo
 
 Implements https://github.com/lerna/lerna/issues/1663#issuecomment-559010254 since there is currently no `lerna audit` command.
